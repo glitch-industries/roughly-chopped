@@ -1398,6 +1398,10 @@ function buildShoppingList(mealIds, repeatBuyKeys) {
   // Format label: "Canned black beans (3 cans)" or just "Canned black beans"
   function formatLabel(name, entry) {
     if (entry.qty && entry.unit) {
+      if (entry.unit === "eggs") {
+        var cartons = Math.ceil(entry.qty / 12);
+        return name + " (" + cartons + " carton" + (cartons > 1 ? "s" : "") + ")";
+      }
       return name + " (" + entry.qty + " " + entry.unit + ")";
     }
     return name;
