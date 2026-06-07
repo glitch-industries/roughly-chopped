@@ -22,6 +22,8 @@ var state = {
   modal: null,            // null | {type, data}
   selectedWeekDay: null,  // for week tab day detail
   picker: null,           // null | { type: "breakfast"|"lunch"|"dinner", seed: N }
+  libraryFilter: null,    // null | "breakfast"|"lunch"|"dinner"|"snack"|"no-cook"|"crockpot"
+  addingRepeatBuy: false, // show inline input in repeat buys
 };
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -546,31 +548,72 @@ function renderLibrary() {
     style: {
       width: "100%", padding: "12px", borderRadius: "12px",
       background: C.brand, color: C.white, border: "none",
-      fontSize: "15px", fontWeight: "600", cursor: "pointer", marginBottom: "20px",
+      fontSize: "15px", fontWeight: "600", cursor: "pointer", marginBottom: "16px",
     },
     onClick: function() { state.modal = { type: "add-meal", data: null }; render(); }
   }, "+ Add a meal");
   wrap.appendChild(addBtn);
 
-  // Group by: Favorites, then by quick/freezer/recipe
-  var favorites = state.meals.filter(function(m) { return m.tags.indexOf("favorite") !== -1; });
-  var freezer = state.meals.filter(function(m) { return m.tags.indexOf("favorite") === -1 && m.tags.indexOf("freezer") !== -1; });
-  var quick = state.meals.filter(function(m) { return m.tags.indexOf("favorite") === -1 && m.tags.indexOf("freezer") === -1 && m.tags.indexOf("quick") !== -1 && !m.recipe; });
-  var hasRecipe = state.meals.filter(function(m) { return m.tags.indexOf("favorite") === -1 && m.recipe; });
+  // ── Filter chips ────────────────────────────────────────────────────────────
+  var FILTERS = [
+    { key: null,        label: "All" },
+    { key: "breakfast", label: "Breakfast" },
+    { key: "lunch",     label: "Lunch" },
+    { key: "dinner",    label: "Dinner" },
+    { key: "snack",     label: "Snack" },
+    { key: "no-cook",   label: "No Cook" },
+    { key: "crockpot",  label: "Crockpot" },
+  ];
+
+  var filterBar = el("div", { style: {
+    display: "flex", gap: "8px", overflowX: "auto", paddingBottom: "4px",
+    marginBottom: "20px", WebkitOverflowScrolling: "touch",
+  }});
+
+  FILTERS.forEach(function(f) {
+    var active = state.libraryFilter === f.key;
+    filterBar.appendChild(el("button", {
+      style: {
+        flexShrink: "0", padding: "6px 14px", borderRadius: "20px",
+        border: "1.5px solid " + (active ? C.purple : C.border),
+        background: active ? C.purple : C.surface,
+        cursor: "pointer", fontSize: "13px", fontWeight: "600",
+        color: active ? C.white : C.textPrimary, whiteSpace: "nowrap",
+      },
+      onClick: function() { state.libraryFilter = f.key; render(); }
+    }, f.label));
+  });
+  wrap.appendChild(filterBar);
+
+  // ── Filter or group meals ───────────────────────────────────────────────────
+  function matchesFilter(m) {
+    var f = state.libraryFilter;
+    if (!f) return true;
+    if (f === "no-cook") return m.tags.indexOf("no-cook") !== -1;
+    if (f === "crockpot") return m.tags.indexOf("crockpot") !== -1;
+    return m.meal_types.indexOf(f) !== -1;
+  }
 
   function renderGroup(title, meals) {
     if (!meals.length) return;
     wrap.appendChild(el("p", { style: { fontSize: "13px", fontWeight: "600", color: C.textMuted, letterSpacing: "0.5px", textTransform: "uppercase", marginBottom: "10px" } }, title));
-    meals.forEach(function(meal) {
-      wrap.appendChild(renderLibraryCard(meal));
-    });
+    meals.forEach(function(meal) { wrap.appendChild(renderLibraryCard(meal)); });
     wrap.appendChild(el("div", { style: { height: "8px" } }));
   }
 
-  renderGroup("Favorites", favorites);
-  renderGroup("Quick & Easy", quick);
-  renderGroup("Freezer", freezer);
-  renderGroup("Has a Recipe", hasRecipe);
+  if (state.libraryFilter) {
+    var filtered = state.meals.filter(matchesFilter);
+    renderGroup(FILTERS.find(function(f) { return f.key === state.libraryFilter; }).label, filtered);
+  } else {
+    var favorites = state.meals.filter(function(m) { return m.tags.indexOf("favorite") !== -1; });
+    var freezer   = state.meals.filter(function(m) { return m.tags.indexOf("favorite") === -1 && m.tags.indexOf("freezer") !== -1; });
+    var quick     = state.meals.filter(function(m) { return m.tags.indexOf("favorite") === -1 && m.tags.indexOf("freezer") === -1 && m.tags.indexOf("quick") !== -1 && !m.recipe; });
+    var hasRecipe = state.meals.filter(function(m) { return m.tags.indexOf("favorite") === -1 && m.recipe; });
+    renderGroup("Favorites", favorites);
+    renderGroup("Quick & Easy", quick);
+    renderGroup("Freezer", freezer);
+    renderGroup("Has a Recipe", hasRecipe);
+  }
 
   return wrap;
 }
@@ -971,6 +1014,8 @@ function renderPlan() {
   // ── Repeat Buys ───────────────────────────────────────────────────────────
   (function() {
     var activeKeys = plan.repeat_buys !== undefined ? plan.repeat_buys : REPEAT_BUYS.map(function(r) { return r.key; });
+    var customs = plan.custom_repeat_buys || [];
+
     var section = el("div", { style: { marginBottom: "24px" } });
     section.appendChild(el("div", { style: { marginBottom: "10px" } }, [
       el("div", { style: { display: "flex", alignItems: "center", gap: "6px", marginBottom: "2px" } }, [
@@ -979,14 +1024,19 @@ function renderPlan() {
       ]),
       el("p", { style: { fontSize: "11px", color: C.textMuted, margin: "0", paddingLeft: "20px" } }, "Weekly staples — uncheck anything you don't need"),
     ]));
+
+    var allItems = REPEAT_BUYS.map(function(r) { return { key: r.key, label: r.label, section: r.section, custom: false }; })
+      .concat(customs.map(function(c) { return { key: "custom:" + c.label, label: c.label, section: c.section || "pantry", custom: true }; }));
+
     var card = el("div", { style: { background: C.surface, border: "1.5px solid " + C.border, borderRadius: "12px", padding: "4px 14px" } });
-    REPEAT_BUYS.forEach(function(rb, i) {
+
+    allItems.forEach(function(rb, i) {
       var isOn = activeKeys.indexOf(rb.key) !== -1;
       var row = el("div", {
         style: {
           display: "flex", alignItems: "center", gap: "12px",
           padding: "12px 0", cursor: "pointer",
-          borderBottom: i < REPEAT_BUYS.length - 1 ? "1px solid " + C.border : "none",
+          borderBottom: i < allItems.length - 1 ? "1px solid " + C.border : "none",
         },
         onClick: function() {
           var p = getWeekPlan();
@@ -1005,11 +1055,62 @@ function renderPlan() {
           display: "flex", alignItems: "center", justifyContent: "center",
           fontSize: "12px", color: C.white,
         }}, isOn ? "✓" : ""),
-        el("span", { style: { fontSize: "15px", color: C.textPrimary } }, rb.label),
+        el("span", { style: { fontSize: "15px", color: C.textPrimary, flex: "1" } }, rb.label),
+        rb.custom ? el("button", {
+          style: { background: "none", border: "none", cursor: "pointer", fontSize: "16px", color: C.textMuted, padding: "0 0 0 8px", flexShrink: "0" },
+          onClick: function(e) {
+            e.stopPropagation();
+            var p = getWeekPlan();
+            p.custom_repeat_buys = (p.custom_repeat_buys || []).filter(function(c) { return c.label !== rb.label; });
+            p.repeat_buys = (p.repeat_buys || []).filter(function(k) { return k !== rb.key; });
+            saveWeekPlan(p); render();
+          }
+        }, "×") : null,
       ]);
       card.appendChild(row);
     });
+
+    // Inline add input or add button
+    if (state.addingRepeatBuy) {
+      var inputRow = el("div", { style: { display: "flex", gap: "8px", padding: "10px 0", borderTop: allItems.length ? "1px solid " + C.border : "none", alignItems: "center" } });
+      var input = el("input", { style: { flex: "1", border: "none", outline: "none", fontSize: "15px", background: "transparent", color: C.textPrimary } });
+      input.placeholder = "e.g. Sparkling water";
+      var saveBtn = el("button", {
+        style: { background: "none", border: "none", cursor: "pointer", fontSize: "13px", color: C.purple, fontWeight: "700", padding: "0", flexShrink: "0" },
+        onClick: function() {
+          var label = input.value.trim();
+          if (!label) { state.addingRepeatBuy = false; render(); return; }
+          var p = getWeekPlan();
+          if (!p.custom_repeat_buys) p.custom_repeat_buys = [];
+          p.custom_repeat_buys.push({ label: label, section: "pantry" });
+          if (!p.repeat_buys) p.repeat_buys = REPEAT_BUYS.map(function(r) { return r.key; });
+          p.repeat_buys.push("custom:" + label);
+          saveWeekPlan(p);
+          state.addingRepeatBuy = false;
+          render();
+        }
+      }, "Add");
+      var cancelBtn = el("button", {
+        style: { background: "none", border: "none", cursor: "pointer", fontSize: "13px", color: C.textMuted, padding: "0", flexShrink: "0" },
+        onClick: function() { state.addingRepeatBuy = false; render(); }
+      }, "Cancel");
+      inputRow.appendChild(input);
+      inputRow.appendChild(saveBtn);
+      inputRow.appendChild(cancelBtn);
+      card.appendChild(inputRow);
+      // Focus the input after render
+      setTimeout(function() { input.focus(); }, 50);
+    }
+
     section.appendChild(card);
+
+    if (!state.addingRepeatBuy) {
+      section.appendChild(el("button", {
+        style: { background: "none", border: "none", cursor: "pointer", fontSize: "13px", color: C.purple, fontWeight: "600", padding: "8px 0 0 0", display: "block" },
+        onClick: function() { state.addingRepeatBuy = true; render(); }
+      }, "+ add item"));
+    }
+
     wrap.appendChild(section);
   })();
 
@@ -1065,9 +1166,20 @@ function buildShoppingList(mealIds, repeatBuyKeys) {
     });
   });
 
+  var plan = getWeekPlan();
+  var customs = plan.custom_repeat_buys || [];
   (repeatBuyKeys || []).forEach(function(key) {
     var rb = REPEAT_BUYS.find(function(r) { return r.key === key; });
-    if (!rb || seen[rb.label]) return;
+    if (!rb) {
+      // custom item
+      var custom = customs.find(function(c) { return "custom:" + c.label === key; });
+      if (custom && !seen[custom.label]) {
+        seen[custom.label] = true;
+        bySection[custom.section || "pantry"].push(custom.label);
+      }
+      return;
+    }
+    if (seen[rb.label]) return;
     seen[rb.label] = true;
     bySection[rb.section].push(rb.label);
   });
