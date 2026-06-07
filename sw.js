@@ -1,4 +1,4 @@
-var CACHE = "roughly-chopped-v1";
+var CACHE = "roughly-chopped-v2";
 var FILES = [
   "./",
   "./index.html",

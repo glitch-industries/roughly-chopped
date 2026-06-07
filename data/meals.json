@@ -94,7 +94,7 @@
     ]
   },
   {
-    "id": "pasta-with-jarred-sauce",
+    "id": "pasta-jarred-sauce",
     "name": "Pasta + Jarred Sauce",
     "meal_types": ["dinner"],
     "tags": ["veggie-friendly", "2-dish"],
@@ -113,6 +113,300 @@
       { "item": "Jarred marinara sauce", "section": "pantry" },
       { "item": "Frozen spinach (optional)", "section": "frozen" },
       { "item": "Canned white beans (optional)", "section": "pantry" }
+    ]
+  },
+  {
+    "id": "salsa-verde-enchiladas",
+    "name": "Salsa Verde Chicken Enchiladas",
+    "meal_types": ["dinner"],
+    "tags": ["1-dish", "favorite"],
+    "dishes": 1,
+    "notes": "Pre-cooked shredded chicken makes this stupidly easy. White cheese melts better than yellow. Don't skimp on the sour cream.",
+    "recipe": [
+      "Preheat oven to 375°F.",
+      "Spread a thin layer of salsa verde on the bottom of a baking dish.",
+      "Fill each tortilla: a scoop of shredded chicken, a spoonful of sour cream, a handful of cheese. Roll up, seam-side down.",
+      "Pour the rest of the salsa verde over the top. Cover with more cheese.",
+      "Bake 20–25 min until bubbly and the cheese is starting to brown.",
+      "Serve with extra sour cream."
+    ],
+    "shopping_items": [
+      { "item": "Pre-cooked shredded chicken", "section": "refrigerated" },
+      { "item": "Flour tortillas", "section": "pantry" },
+      { "item": "Salsa verde (jarred)", "section": "pantry" },
+      { "item": "Sour cream", "section": "refrigerated" },
+      { "item": "White cheese (Monterey Jack or queso fresco)", "section": "refrigerated" }
+    ]
+  },
+  {
+    "id": "ground-beef-tacos",
+    "name": "Ground Beef Tacos",
+    "meal_types": ["dinner"],
+    "tags": ["1-dish"],
+    "dishes": 1,
+    "notes": "Keep toppings simple — shredded cheese, sour cream, salsa. Corn tortillas hold up better if you warm them in the pan first.",
+    "recipe": [
+      "Brown ground beef in a pan over medium-high heat, breaking it up as it cooks.",
+      "Drain most of the fat. Season with cumin, chili powder, garlic powder, salt — go by smell and taste.",
+      "Add a splash of water, stir, let it simmer a minute.",
+      "Warm tortillas in the same pan or a dry skillet.",
+      "Load them up: beef, cheese, sour cream, salsa, whatever else you have."
+    ],
+    "shopping_items": [
+      { "item": "Ground beef", "section": "refrigerated" },
+      { "item": "Corn or flour tortillas", "section": "pantry" },
+      { "item": "Shredded cheese", "section": "refrigerated" },
+      { "item": "Sour cream", "section": "refrigerated" },
+      { "item": "Salsa", "section": "pantry" }
+    ]
+  },
+  {
+    "id": "air-fryer-nachos",
+    "name": "Air Fryer Nachos",
+    "meal_types": ["lunch", "dinner", "snack"],
+    "tags": ["quick", "no-dishes", "air-fryer"],
+    "dishes": 0,
+    "notes": "Use the air fryer basket lined with foil for easy cleanup. Canned jalapeños, black beans, whatever you have.",
+    "recipe": [
+      "Line air fryer basket with foil.",
+      "Spread chips in a single-ish layer.",
+      "Add toppings: canned beans, cheese, jalapeños.",
+      "Air fry at 350°F for 3–5 min until the cheese is melted.",
+      "Top with sour cream, salsa, avocado — whatever's around."
+    ],
+    "shopping_items": [
+      { "item": "Tortilla chips", "section": "pantry" },
+      { "item": "Shredded cheese", "section": "refrigerated" },
+      { "item": "Canned black beans", "section": "pantry" },
+      { "item": "Salsa", "section": "pantry" },
+      { "item": "Sour cream", "section": "refrigerated" }
+    ]
+  },
+  {
+    "id": "teriyaki-beef-bowl",
+    "name": "Teriyaki Ground Beef Rice Bowl",
+    "meal_types": ["lunch", "dinner"],
+    "tags": ["1-dish"],
+    "dishes": 1,
+    "notes": "Bottled teriyaki sauce is completely fine. Add a fried egg on top if you have one.",
+    "recipe": [
+      "Cook rice (microwave pouches are great here).",
+      "Brown ground beef in a pan, breaking it up.",
+      "Drain most of the fat. Pour in a few glugs of teriyaki sauce, stir to coat.",
+      "Let it simmer a minute until sticky.",
+      "Serve over rice. Add whatever toppings — frozen edamame, shredded carrots, a fried egg."
+    ],
+    "shopping_items": [
+      { "item": "Ground beef", "section": "refrigerated" },
+      { "item": "Teriyaki sauce (bottled)", "section": "pantry" },
+      { "item": "Microwave rice pouches", "section": "pantry" }
+    ]
+  },
+  {
+    "id": "air-fryer-gyoza",
+    "name": "Air Fryer Gyoza / Dumplings",
+    "meal_types": ["lunch", "dinner", "snack"],
+    "tags": ["freezer", "quick", "air-fryer", "no-dishes"],
+    "dishes": 0,
+    "notes": "Frozen gyoza straight from the bag into the air fryer. Dipping sauce: soy sauce + a little rice vinegar + chili flakes.",
+    "recipe": [
+      "Spray air fryer basket lightly with oil.",
+      "Arrange frozen gyoza in a single layer.",
+      "Air fry at 375°F for 8–10 min, flipping halfway.",
+      "Mix dipping sauce: soy sauce + rice vinegar + chili flakes, or use store-bought."
+    ],
+    "shopping_items": [
+      { "item": "Frozen gyoza or dumplings", "section": "frozen" },
+      { "item": "Soy sauce", "section": "pantry" },
+      { "item": "Rice vinegar", "section": "pantry" }
+    ]
+  },
+  {
+    "id": "ramen-egg",
+    "name": "Ramen + Soft Egg + Veggies",
+    "meal_types": ["lunch", "dinner"],
+    "tags": ["quick", "1-dish"],
+    "dishes": 1,
+    "notes": "Instant ramen is the base — the egg and veg make it an actual meal. Baby spinach wilts right in.",
+    "recipe": [
+      "Boil water, cook ramen noodles.",
+      "While noodles cook, soft-boil an egg (6–7 min in boiling water) or just crack one straight into the broth.",
+      "Add seasoning packet (or miso paste + soy sauce instead).",
+      "Throw in a handful of spinach or frozen edamame at the end.",
+      "Top with the egg, a drizzle of sesame oil if you have it."
+    ],
+    "shopping_items": [
+      { "item": "Instant ramen (any variety)", "section": "pantry" },
+      { "item": "Eggs", "section": "refrigerated" },
+      { "item": "Baby spinach or frozen edamame", "section": "produce" }
+    ]
+  },
+  {
+    "id": "air-fryer-tofu-bowl",
+    "name": "Air Fryer Tofu + Peanut Sauce Bowl",
+    "meal_types": ["lunch", "dinner"],
+    "tags": ["veggie-friendly", "air-fryer", "1-dish", "favorite"],
+    "dishes": 1,
+    "notes": "Press the tofu first — the drier it is, the crispier it gets. Bottled peanut sauce is great; or thin peanut butter with soy sauce and lime.",
+    "recipe": [
+      "Press tofu for at least 15 min (tofu press or wrap in a towel with something heavy on top).",
+      "Cut into cubes, toss with a little soy sauce and cornstarch.",
+      "Air fry at 400°F for 12–15 min, shaking halfway, until crispy.",
+      "Cook rice while the tofu is going.",
+      "Toss any veggies (broccoli, edamame, shredded carrots) in the air fryer for the last 5 min.",
+      "Assemble: rice, tofu, veggies, peanut sauce drizzled over everything."
+    ],
+    "shopping_items": [
+      { "item": "Extra firm tofu", "section": "refrigerated" },
+      { "item": "Peanut sauce (bottled) or peanut butter", "section": "pantry" },
+      { "item": "Microwave rice pouches", "section": "pantry" },
+      { "item": "Broccoli florets or edamame", "section": "produce" },
+      { "item": "Soy sauce", "section": "pantry" },
+      { "item": "Cornstarch", "section": "pantry" }
+    ]
+  },
+  {
+    "id": "buddha-bowl",
+    "name": "Buddha Bowl",
+    "meal_types": ["lunch", "dinner"],
+    "tags": ["veggie-friendly", "no-cook", "no-dishes", "favorite"],
+    "dishes": 0,
+    "notes": "Grain + protein + veg + sauce. No rules. Use whatever's in the fridge. Tahini or miso ginger dressing both work great.",
+    "recipe": null,
+    "shopping_items": [
+      { "item": "Microwave grain pouches (rice, quinoa, or farro)", "section": "pantry" },
+      { "item": "Pre-cooked chicken or canned chickpeas", "section": "refrigerated" },
+      { "item": "Shredded carrots, cucumber, or edamame", "section": "produce" },
+      { "item": "Tahini or miso ginger dressing", "section": "pantry" },
+      { "item": "Avocado (optional)", "section": "produce" }
+    ]
+  },
+  {
+    "id": "shakshuka",
+    "name": "Shakshuka",
+    "meal_types": ["breakfast", "lunch", "dinner"],
+    "tags": ["veggie-friendly", "1-dish", "favorite"],
+    "dishes": 1,
+    "notes": "Fancy-sounding, stupidly easy. Canned crushed tomatoes do all the work. Feta on top is not optional. Pita for dipping.",
+    "recipe": [
+      "Heat a pan on medium, add olive oil.",
+      "Add diced onion and peppers if you have them — or skip straight to the tomatoes.",
+      "Pour in a can of crushed tomatoes. Season with cumin, smoked paprika, salt, garlic powder.",
+      "Let it bubble for 5 minutes, then make little wells with a spoon.",
+      "Crack an egg into each well. Cover the pan.",
+      "Cook 5–8 min until whites are set but yolks are still runny.",
+      "Top with crumbled feta, fresh herbs if you have them. Serve with pita."
+    ],
+    "shopping_items": [
+      { "item": "Canned crushed tomatoes", "section": "pantry" },
+      { "item": "Eggs", "section": "refrigerated" },
+      { "item": "Crumbled feta", "section": "refrigerated" },
+      { "item": "Pita bread", "section": "pantry" }
+    ]
+  },
+  {
+    "id": "greek-salad-hummus",
+    "name": "Greek Salad + Hummus + Pita",
+    "meal_types": ["lunch", "dinner"],
+    "tags": ["no-cook", "no-dishes", "veggie-friendly", "quick"],
+    "dishes": 0,
+    "notes": "Cucumber, olives, cherry tomatoes, feta, red onion if you have it. Olive oil + lemon + oregano is all the dressing you need.",
+    "recipe": null,
+    "shopping_items": [
+      { "item": "Cucumber", "section": "produce" },
+      { "item": "Cherry tomatoes", "section": "produce" },
+      { "item": "Kalamata olives", "section": "pantry" },
+      { "item": "Crumbled feta", "section": "refrigerated" },
+      { "item": "Hummus", "section": "refrigerated" },
+      { "item": "Pita bread", "section": "pantry" }
+    ]
+  },
+  {
+    "id": "beef-couscous",
+    "name": "Ground Beef + Couscous + Herbs",
+    "meal_types": ["lunch", "dinner"],
+    "tags": ["1-dish"],
+    "dishes": 1,
+    "notes": "Couscous is just hot water and 5 minutes — barely cooking. Lemon and cumin make ground beef taste very different from taco night.",
+    "recipe": [
+      "Pour boiling water over couscous (equal parts), cover with a plate, wait 5 min. Fluff with a fork.",
+      "Brown ground beef in a pan. Drain fat.",
+      "Season with cumin, cinnamon (just a pinch), garlic powder, salt, lemon zest if you have it.",
+      "Serve beef over couscous. Squeeze lemon over everything.",
+      "Top with fresh parsley, crumbled feta, or whatever sounds good."
+    ],
+    "shopping_items": [
+      { "item": "Ground beef", "section": "refrigerated" },
+      { "item": "Couscous", "section": "pantry" },
+      { "item": "Crumbled feta (optional)", "section": "refrigerated" },
+      { "item": "Lemon", "section": "produce" }
+    ]
+  },
+  {
+    "id": "air-fryer-falafel",
+    "name": "Air Fryer Falafel + Pita",
+    "meal_types": ["lunch", "dinner"],
+    "tags": ["freezer", "air-fryer", "veggie-friendly", "quick"],
+    "dishes": 0,
+    "notes": "Frozen falafel — stuff into pita with hummus, cucumber, and whatever you've got.",
+    "recipe": [
+      "Air fry frozen falafel at 375°F for 10–12 min, flipping halfway.",
+      "Warm pita in the air fryer last 2 min.",
+      "Load up: falafel, hummus, cucumber, tomato, a drizzle of hot sauce or tzatziki."
+    ],
+    "shopping_items": [
+      { "item": "Frozen falafel", "section": "frozen" },
+      { "item": "Pita bread", "section": "pantry" },
+      { "item": "Hummus", "section": "refrigerated" },
+      { "item": "Cucumber", "section": "produce" }
+    ]
+  },
+  {
+    "id": "white-bean-tomato-soup",
+    "name": "White Bean Tomato Soup (Crockpot)",
+    "meal_types": ["lunch", "dinner"],
+    "tags": ["crockpot", "veggie-friendly", "1-dish", "favorite"],
+    "dishes": 1,
+    "notes": "Dump everything in, walk away for 4–6 hours. Mash some beans against the side to thicken it. Crusty bread is essential.",
+    "recipe": [
+      "Dump into the crockpot: 2 cans white beans (drained), 1 can crushed tomatoes, 1 can diced tomatoes, broth, garlic powder, Italian seasoning, salt, red pepper flakes.",
+      "Optional: add a parmesan rind if you have one — incredible flavor.",
+      "Cook on low 4–6 hours or high 2–3 hours.",
+      "Mash some beans against the side to thicken it up.",
+      "Stir in a handful of spinach at the end. Serve with bread."
+    ],
+    "shopping_items": [
+      { "item": "Canned white beans (2 cans)", "section": "pantry" },
+      { "item": "Canned crushed tomatoes", "section": "pantry" },
+      { "item": "Vegetable broth", "section": "pantry" },
+      { "item": "Baby spinach", "section": "produce" }
+    ]
+  },
+  {
+    "id": "avocado-toast",
+    "name": "Avocado Toast",
+    "meal_types": ["breakfast", "lunch", "snack"],
+    "tags": ["no-cook", "no-dishes", "quick", "veggie-friendly"],
+    "dishes": 0,
+    "notes": "Everything bagel seasoning is the move. Add a fried egg or sliced cherry tomatoes if you want more substance.",
+    "recipe": null,
+    "shopping_items": [
+      { "item": "Avocados", "section": "produce" },
+      { "item": "Bread", "section": "pantry" },
+      { "item": "Everything bagel seasoning", "section": "pantry" }
+    ]
+  },
+  {
+    "id": "cottage-cheese-bowl",
+    "name": "Cottage Cheese Bowl",
+    "meal_types": ["breakfast", "snack"],
+    "tags": ["no-cook", "no-dishes", "quick", "veggie-friendly"],
+    "dishes": 0,
+    "notes": "Go savory: cucumber, cherry tomatoes, everything bagel seasoning, olive oil. Or sweet: honey, berries, granola. Both are great.",
+    "recipe": null,
+    "shopping_items": [
+      { "item": "Cottage cheese", "section": "refrigerated" },
+      { "item": "Cherry tomatoes or berries", "section": "produce" }
     ]
   }
 ]
