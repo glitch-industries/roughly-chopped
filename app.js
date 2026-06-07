@@ -1,18 +1,20 @@
 // ─── Colors ───────────────────────────────────────────────────────────────────
 var C = {
-  bg:          "#f5ede6",
-  surface:     "#fdf8f4",
-  brand:       "#c1694f",
-  accent:      "#e8a598",
-  accent2:     "#d4826a",
-  purple:      "#9b8ec4",  // eggplant lavender
-  purpleLight: "#ede9f8",  // pale purple tint
-  textPrimary: "#3d2b23",
-  textMuted:   "#9c7b72",
-  chipActive:  "#c1694f",
-  chipInactive:"#f0e0d8",
-  border:      "#e8d5cb",
+  bg:          "#faf5ee",  // warm cream (eggplant flesh)
+  surface:     "#fffdf9",  // elevated cream (card surfaces)
+  brand:       "#6c4675",  // deep eggplant purple (primary CTA, active tabs)
+  accent:      "#d4c5d9",  // muted lavender (borders, secondary outlines)
+  accent2:     "#56365e",  // darker eggplant (pressed/hover states)
+  purple:      "#6c4675",  // same as brand (kept for backward compat)
+  purpleLight: "#f2ecf4",  // pale eggplant tint (pill backgrounds, nudge banners)
+  textPrimary: "#2c332e",  // near-black charcoal (headers, body)
+  textMuted:   "#7a7a72",  // warm grey (secondary text)
+  chipActive:  "#6c4675",  // eggplant purple (active filter chips)
+  chipInactive:"#f0eaf2",  // pale purple (inactive chips)
+  border:      "#e2dce8",  // soft purple-grey border
   white:       "#ffffff",
+  green:       "#8fa87b",  // sage green (success states, veggie habit)
+  greenLight:  "#eef3ea",  // pale sage (success backgrounds)
 };
 
 // ─── State ────────────────────────────────────────────────────────────────────
