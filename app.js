@@ -75,7 +75,7 @@ function saveDayLog(log) {
 
 function getWeekPlan() {
   var raw = localStorage.getItem("plan_" + weekKey());
-  return raw ? JSON.parse(raw) : { week: weekKey(), meal_pool: [], shopping_list: [] };
+  return raw ? JSON.parse(raw) : { week: weekKey(), meal_pool: [], shopping_list: [], ticked_items: [] };
 }
 
 function saveWeekPlan(plan) {
@@ -650,10 +650,36 @@ function renderPlan() {
   // Shopping list
   if (plan.meal_pool.length) {
     wrap.appendChild(el("div", { style: { height: "1px", background: C.border, margin: "20px 0" } }));
-    wrap.appendChild(el("p", { style: { fontSize: "13px", fontWeight: "600", color: C.textMuted, letterSpacing: "0.5px", textTransform: "uppercase", marginBottom: "16px" } }, "Shopping List"));
 
+    var ticked = plan.ticked_items || [];
     var bySection = buildShoppingList(plan.meal_pool);
     var hasAny = SECTIONS.some(function(s) { return bySection[s.key] && bySection[s.key].length; });
+    var totalItems = SECTIONS.reduce(function(n, s) { return n + (bySection[s.key] ? bySection[s.key].length : 0); }, 0);
+    var tickedCount = ticked.length;
+
+    // Header row with progress
+    var listHeader = el("div", { style: { display: "flex", alignItems: "baseline", gap: "10px", marginBottom: "16px" } }, [
+      el("p", { style: { fontSize: "13px", fontWeight: "600", color: C.textMuted, letterSpacing: "0.5px", textTransform: "uppercase" } }, "Shopping List"),
+      tickedCount > 0 ? el("span", { style: { fontSize: "12px", color: C.purple } }, tickedCount + " / " + totalItems + " got it") : null,
+    ]);
+
+    // Clear ticks button
+    if (tickedCount > 0) {
+      var clearBtn = el("button", {
+        style: {
+          marginLeft: "auto", background: "none", border: "none",
+          fontSize: "12px", color: C.textMuted, cursor: "pointer", padding: "0",
+        },
+        onClick: function() {
+          var p = getWeekPlan();
+          p.ticked_items = [];
+          saveWeekPlan(p);
+          render();
+        }
+      }, "clear all");
+      listHeader.appendChild(clearBtn);
+    }
+    wrap.appendChild(listHeader);
 
     if (!hasAny) {
       wrap.appendChild(el("p", { style: { color: C.textMuted, fontSize: "14px" } }, "No items yet."));
@@ -662,7 +688,6 @@ function renderPlan() {
         var items = bySection[s.key];
         if (!items || !items.length) return;
 
-        // Section header
         wrap.appendChild(el("div", { style: {
           display: "flex", alignItems: "center", gap: "8px",
           marginBottom: "8px", marginTop: "4px",
@@ -677,16 +702,36 @@ function renderPlan() {
         }});
 
         items.forEach(function(itemText, i) {
-          var row = el("div", { style: {
-            display: "flex", gap: "10px", alignItems: "center",
-            padding: "11px 0",
-            borderBottom: i < items.length - 1 ? "1px solid " + C.border : "none",
-          }}, [
+          var isTicked = ticked.indexOf(itemText) !== -1;
+          var row = el("div", {
+            style: {
+              display: "flex", gap: "12px", alignItems: "center",
+              padding: "12px 0", cursor: "pointer",
+              borderBottom: i < items.length - 1 ? "1px solid " + C.border : "none",
+              transition: "opacity 0.15s",
+              opacity: isTicked ? "0.45" : "1",
+            },
+            onClick: function() {
+              var p = getWeekPlan();
+              if (!p.ticked_items) p.ticked_items = [];
+              var idx = p.ticked_items.indexOf(itemText);
+              if (idx === -1) p.ticked_items.push(itemText);
+              else p.ticked_items.splice(idx, 1);
+              saveWeekPlan(p);
+              render();
+            }
+          }, [
             el("div", { style: {
-              width: "8px", height: "8px", borderRadius: "50%", flexShrink: "0",
-              background: C.purpleLight, border: "1.5px solid " + C.purple,
-            }}),
-            el("span", { style: { fontSize: "15px", color: C.textPrimary } }, itemText),
+              width: "22px", height: "22px", borderRadius: "50%", flexShrink: "0",
+              background: isTicked ? C.purple : "transparent",
+              border: "2px solid " + (isTicked ? C.purple : C.border),
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: "12px", color: C.white, transition: "all 0.15s",
+            }}, isTicked ? "✓" : ""),
+            el("span", { style: {
+              fontSize: "15px", color: C.textPrimary,
+              textDecoration: isTicked ? "line-through" : "none",
+            }}, itemText),
           ]);
           sectionCard.appendChild(row);
         });
