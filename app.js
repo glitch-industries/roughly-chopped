@@ -193,7 +193,8 @@ function render() {
 
 // ─── Header ───────────────────────────────────────────────────────────────────
 function renderHeader() {
-  var titles = { feedme: "Feed Me", week: "This Week", plan: "Plan Week" };
+  var plan = getWeekPlan();
+  var titles = { feedme: "Feed Me", week: "This Week", plan: plan.shopping_mode ? "Shopping List" : "Plan Week" };
   return el("div", { style: {
     background: C.surface,
     padding: "16px 20px 12px",
@@ -690,19 +691,29 @@ function renderWeek() {
     return wrap;
   }
 
-  wrap.appendChild(el("p", { style: { fontSize: "12px", fontWeight: "600", color: C.textMuted, textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "10px" } }, "This week"));
-  plan.meal_pool.forEach(function(mealId) {
+  wrap.appendChild(el("p", { style: { fontSize: "12px", fontWeight: "600", color: C.textMuted, textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "8px" } }, "Eaten this week"));
+  var trackCard = el("div", { style: { background: C.surface, border: "1.5px solid " + C.border, borderRadius: "12px", padding: "4px 14px" } });
+  // Day initials header
+  var dayInitials = ["M","T","W","T","F","S","S"];
+  var headerRow = el("div", { style: { display: "flex", alignItems: "center", gap: "8px", padding: "8px 0 4px", borderBottom: "1px solid " + C.border } }, [
+    el("span", { style: { fontSize: "12px", color: C.textMuted, flex: "1" } }, ""),
+  ]);
+  dayInitials.forEach(function(d) {
+    headerRow.appendChild(el("span", { style: { fontSize: "10px", color: C.textMuted, width: "14px", textAlign: "center" } }, d));
+  });
+  trackCard.appendChild(headerRow);
+  plan.meal_pool.forEach(function(mealId, i) {
     var meal = getMealById(mealId); if (!meal) return;
-    var dotRow = el("div", { style: { display: "flex", gap: "5px", marginTop: "5px" } });
+    var row = el("div", { style: { display: "flex", alignItems: "center", gap: "8px", padding: "8px 0", borderBottom: i < plan.meal_pool.length - 1 ? "1px solid " + C.border : "none" } }, [
+      el("span", { style: { fontSize: "13px", color: C.textPrimary, flex: "1", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" } }, meal.name),
+    ]);
     days.forEach(function(d) {
       var had = getDayLog(fmtDate(d)).logged_meals && getDayLog(fmtDate(d)).logged_meals.indexOf(mealId) !== -1;
-      dotRow.appendChild(el("div", { style: { width: "8px", height: "8px", borderRadius: "50%", background: had ? C.brand : C.chipInactive } }));
+      row.appendChild(el("div", { style: { width: "14px", height: "14px", borderRadius: "50%", flexShrink: "0", background: had ? C.brand : C.chipInactive } }));
     });
-    wrap.appendChild(el("div", { style: { background: C.surface, border: "1.5px solid " + C.border, borderRadius: "12px", padding: "10px 14px", marginBottom: "8px" } }, [
-      el("div", { style: { fontSize: "14px", fontWeight: "600", color: C.textPrimary } }, meal.name),
-      dotRow,
-    ]));
+    trackCard.appendChild(row);
   });
+  wrap.appendChild(trackCard);
 
   return wrap;
 }
@@ -957,6 +968,19 @@ function renderPlan() {
         wrap.appendChild(sectionCard);
       });
     }
+
+    // Bottom "back to plan" so you don't have to scroll up
+    wrap.appendChild(el("button", {
+      style: {
+        width: "100%", padding: "14px", borderRadius: "12px", marginTop: "20px", marginBottom: "32px",
+        border: "1.5px solid " + C.border, background: "transparent", cursor: "pointer",
+        fontSize: "14px", fontWeight: "600", color: C.textMuted,
+      },
+      onClick: function() {
+        var p = getWeekPlan(); p.shopping_mode = false; saveWeekPlan(p); render();
+      }
+    }, "← Back to plan"));
+
     return wrap;
   }
 
@@ -1396,13 +1420,19 @@ function buildShoppingList(mealIds, repeatBuyKeys) {
   });
 
   // Format label: "Canned black beans (3 cans)" or just "Canned black beans"
+  function pluralizeUnit(qty, unit) {
+    if (qty <= 1) return unit;
+    if (unit === "box") return "boxes";
+    if (!unit.endsWith("s")) return unit + "s";
+    return unit;
+  }
   function formatLabel(name, entry) {
     if (entry.qty && entry.unit) {
       if (entry.unit === "eggs") {
         var cartons = Math.ceil(entry.qty / 12);
         return name + " (" + cartons + " carton" + (cartons > 1 ? "s" : "") + ")";
       }
-      return name + " (" + entry.qty + " " + entry.unit + ")";
+      return name + " (" + entry.qty + " " + pluralizeUnit(entry.qty, entry.unit) + ")";
     }
     return name;
   }
