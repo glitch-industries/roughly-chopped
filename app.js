@@ -630,6 +630,8 @@ var DEFAULT_SERVINGS = {
   "salad-kit-chicken": 2, "veggie-quesadilla": 2, "shakshuka": 2,
   // batch on Sunday, grab all week
   "hard-boiled-eggs": 6,
+  // packed lunch batch meals
+  "cold-pasta-salad": 5,
 };
 
 function getDefaultServings(id) { return DEFAULT_SERVINGS[id] || 1; }

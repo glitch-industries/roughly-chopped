@@ -18,7 +18,7 @@
     "meal_types": ["lunch", "dinner"],
     "tags": ["no-cook", "no-dishes", "quick", "veggie-friendly", "favorite"],
     "dishes": 0,
-    "notes": "Throw in extra spinach, cherry tomatoes, shredded cheese — whatever's around. The kit dressing is usually enough.",
+    "notes": "Great packed lunch — toss in a container, keep dressing on the side so it doesn't get soggy. Add spinach, cherry tomatoes, shredded cheese.",
     "recipe": null,
     "shopping_items": [
       { "item": "Bag salad kit", "section": "produce" },
@@ -41,7 +41,7 @@
   {
     "id": "scrambled-eggs-toast",
     "name": "Scrambled Eggs + Toast",
-    "meal_types": ["breakfast", "lunch"],
+    "meal_types": ["breakfast"],
     "tags": ["quick", "veggie-friendly", "1-dish"],
     "dishes": 1,
     "notes": "Season however you feel — everything bagel seasoning, hot sauce, fresh herbs if you have them.",
@@ -163,7 +163,7 @@
   {
     "id": "air-fryer-nachos",
     "name": "Air Fryer Nachos",
-    "meal_types": ["lunch", "dinner", "snack"],
+    "meal_types": ["dinner", "snack"],
     "tags": ["quick", "no-dishes", "air-fryer"],
     "dishes": 0,
     "notes": "Use the air fryer basket lined with foil for easy cleanup. Canned jalapeños, black beans, whatever you have.",
@@ -188,7 +188,7 @@
     "meal_types": ["lunch", "dinner"],
     "tags": ["1-dish"],
     "dishes": 1,
-    "notes": "Bottled teriyaki sauce is completely fine. Add a fried egg on top if you have one.",
+    "notes": "Good packed lunch — travels well in a container, microwave at work or eat at room temp. Bottled teriyaki sauce is completely fine.",
     "recipe": [
       "Cook rice (microwave pouches are great here).",
       "Brown ground beef in a pan, breaking it up.",
@@ -224,7 +224,7 @@
   {
     "id": "ramen-egg",
     "name": "Ramen + Soft Egg + Veggies",
-    "meal_types": ["lunch", "dinner"],
+    "meal_types": ["dinner"],
     "tags": ["quick", "1-dish"],
     "dishes": 1,
     "notes": "Instant ramen is the base — the egg and veg make it an actual meal. Baby spinach wilts right in.",
@@ -247,7 +247,7 @@
     "meal_types": ["lunch", "dinner"],
     "tags": ["veggie-friendly", "air-fryer", "1-dish", "favorite"],
     "dishes": 1,
-    "notes": "Press the tofu first — the drier it is, the crispier it gets. Bottled peanut sauce is great; or thin peanut butter with soy sauce and lime.",
+    "notes": "Packs great for lunch — tofu and peanut sauce are good at room temp. Keep sauce separate if you're packing it ahead. Press the tofu first so it gets crispy.",
     "recipe": [
       "Press tofu for at least 15 min (tofu press or wrap in a towel with something heavy on top).",
       "Cut into cubes, toss with a little soy sauce and cornstarch.",
@@ -271,7 +271,7 @@
     "meal_types": ["lunch", "dinner"],
     "tags": ["veggie-friendly", "no-cook", "no-dishes", "favorite"],
     "dishes": 0,
-    "notes": "Grain + protein + veg + sauce. No rules. Use whatever's in the fridge. Tahini or miso ginger dressing both work great.",
+    "notes": "Perfect packed lunch — assemble in a container the night before, dressing on the side. Grain + protein + veg + sauce. No rules.",
     "recipe": null,
     "shopping_items": [
       { "item": "Microwave grain pouches (rice, quinoa, or farro)", "section": "pantry" },
@@ -284,7 +284,7 @@
   {
     "id": "shakshuka",
     "name": "Shakshuka",
-    "meal_types": ["breakfast", "lunch", "dinner"],
+    "meal_types": ["breakfast", "dinner"],
     "tags": ["veggie-friendly", "1-dish", "favorite"],
     "dishes": 1,
     "notes": "Fancy-sounding, stupidly easy. Canned crushed tomatoes do all the work. Feta on top is not optional. Pita for dipping.",
@@ -310,7 +310,7 @@
     "meal_types": ["lunch", "dinner"],
     "tags": ["no-cook", "no-dishes", "veggie-friendly", "quick"],
     "dishes": 0,
-    "notes": "Cucumber, olives, cherry tomatoes, feta, red onion if you have it. Olive oil + lemon + oregano is all the dressing you need.",
+    "notes": "Great packed lunch — pack veggies, pita, and hummus in a container the night before. No heating needed. Cucumber, olives, cherry tomatoes, feta.",
     "recipe": null,
     "shopping_items": [
       { "item": "Cucumber", "section": "produce" },
@@ -327,7 +327,7 @@
     "meal_types": ["lunch", "dinner"],
     "tags": ["1-dish"],
     "dishes": 1,
-    "notes": "Couscous is just hot water and 5 minutes — barely cooking. Lemon and cumin make ground beef taste very different from taco night.",
+    "notes": "Good packed lunch — couscous is great at room temp or microwaved. Make a batch, pack in containers for the week. Lemon and cumin make ground beef taste nothing like taco night.",
     "recipe": [
       "Pour boiling water over couscous (equal parts), cover with a plate, wait 5 min. Fluff with a fork.",
       "Brown ground beef in a pan. Drain fat.",
@@ -348,7 +348,7 @@
     "meal_types": ["lunch", "dinner"],
     "tags": ["freezer", "air-fryer", "veggie-friendly", "quick"],
     "dishes": 0,
-    "notes": "Frozen falafel — stuff into pita with hummus, cucumber, and whatever you've got.",
+    "notes": "Good packed lunch — falafel is totally fine at room temp. Air fry in the morning, pack with pita, hummus, and veggies. Microwave if you want it warm.",
     "recipe": [
       "Air fry frozen falafel at 375°F for 10–12 min, flipping halfway.",
       "Warm pita in the air fryer last 2 min.",
@@ -385,7 +385,7 @@
   {
     "id": "avocado-toast",
     "name": "Avocado Toast",
-    "meal_types": ["breakfast", "lunch", "snack"],
+    "meal_types": ["breakfast", "snack"],
     "tags": ["no-cook", "no-dishes", "quick", "veggie-friendly"],
     "dishes": 0,
     "notes": "Everything bagel seasoning is the move. Add a fried egg or sliced cherry tomatoes if you want more substance.",
@@ -610,6 +610,46 @@
       { "item": "Vegetable broth", "section": "pantry" },
       { "item": "Small pasta (ditalini or elbows)", "section": "pantry" },
       { "item": "Frozen spinach", "section": "frozen" }
+    ]
+  },
+
+  {
+    "id": "chicken-wrap",
+    "name": "Chicken Wrap",
+    "meal_types": ["lunch"],
+    "tags": ["no-cook", "no-dishes", "quick", "favorite"],
+    "dishes": 0,
+    "notes": "2-minute packed lunch. Roll tight and wrap in foil so it holds together in your bag. Eat at room temp — no microwave needed.",
+    "recipe": null,
+    "shopping_items": [
+      { "item": "Large flour tortillas", "section": "pantry" },
+      { "item": "Kevin's pre-cooked chicken", "section": "refrigerated" },
+      { "item": "Baby spinach or romaine", "section": "produce" },
+      { "item": "Shredded cheese", "section": "refrigerated" },
+      { "item": "Hummus, ranch, or sriracha mayo", "section": "refrigerated" }
+    ]
+  },
+  {
+    "id": "cold-pasta-salad",
+    "name": "Cold Pasta Salad",
+    "meal_types": ["lunch"],
+    "tags": ["veggie-friendly", "2-dish", "favorite"],
+    "dishes": 2,
+    "notes": "Make a big batch on Sunday, pack in containers for the whole week. Gets better as it sits. Eat cold — no microwave needed.",
+    "recipe": [
+      "Cook pasta (rotini or penne work best — they hold dressing). Drain and rinse with cold water.",
+      "Toss with Italian dressing while still warm so it soaks in.",
+      "Add: halved cherry tomatoes, kalamata olives, crumbled feta, diced cucumber, any other veg you have.",
+      "Season with salt, pepper, dried oregano.",
+      "Refrigerate. Keeps 4–5 days. Add a little more dressing before eating if it seems dry."
+    ],
+    "shopping_items": [
+      { "item": "Rotini or penne pasta", "section": "pantry" },
+      { "item": "Italian dressing (bottled)", "section": "pantry" },
+      { "item": "Cherry tomatoes", "section": "produce" },
+      { "item": "Kalamata olives", "section": "pantry" },
+      { "item": "Crumbled feta", "section": "refrigerated" },
+      { "item": "Cucumber", "section": "produce" }
     ]
   },
 
