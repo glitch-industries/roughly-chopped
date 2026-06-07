@@ -616,6 +616,24 @@ var THEMES = [
     meals: ["eggo-pb", "salad-kit-chicken", "frozen-veggie-meal", "veggie-quesadilla", "shakshuka", "pasta-jarred-sauce"] },
 ];
 
+var DEFAULT_SERVINGS = {
+  // crockpot soups — one big batch covers most of the week
+  "white-bean-tomato-soup": 6, "butternut-squash-soup": 6, "potato-leek-soup": 6,
+  "red-lentil-soup": 6, "tomato-basil-soup": 6, "black-bean-soup": 6,
+  "corn-chowder": 6, "minestrone": 6,
+  // recipes that make a batch
+  "salsa-verde-enchiladas": 4,
+  "pasta-jarred-sauce": 3, "air-fryer-tofu-bowl": 3,
+  "ground-beef-tacos": 3, "teriyaki-beef-bowl": 3, "beef-couscous": 3,
+  "air-fryer-gyoza": 3, "air-fryer-falafel": 3,
+  // two servings from one prep
+  "salad-kit-chicken": 2, "veggie-quesadilla": 2, "shakshuka": 2,
+  // batch on Sunday, grab all week
+  "hard-boiled-eggs": 6,
+};
+
+function getDefaultServings(id) { return DEFAULT_SERVINGS[id] || 1; }
+
 function seededShuffle(arr, seed) {
   var a = arr.slice(), s = seed + 1;
   for (var i = a.length - 1; i > 0; i--) {
@@ -648,7 +666,8 @@ function renderPlan() {
       onClick: function() {
         var p = getWeekPlan();
         p.meal_pool = theme.meals.filter(function(id) { return !!getMealById(id); });
-        if (!p.servings) p.servings = {};
+        p.servings = {};
+        p.meal_pool.forEach(function(id) { p.servings[id] = getDefaultServings(id); });
         saveWeekPlan(p);
         state.picker = null;
         render();
@@ -766,13 +785,20 @@ function renderPlan() {
             },
             onClick: function() {
               var p = getWeekPlan();
-              if (p.meal_pool.indexOf(m.id) === -1) p.meal_pool.push(m.id);
+              if (p.meal_pool.indexOf(m.id) === -1) {
+                p.meal_pool.push(m.id);
+                if (!p.servings) p.servings = {};
+                p.servings[m.id] = getDefaultServings(m.id);
+              }
               saveWeekPlan(p);
               state.picker = null;
               render();
             }
           }, [
-            el("span", { style: { flex: "1", fontSize: "14px", fontWeight: "600", color: C.textPrimary } }, m.name),
+            el("div", { style: { flex: "1" } }, [
+              el("span", { style: { fontSize: "14px", fontWeight: "600", color: C.textPrimary, display: "block" } }, m.name),
+              getDefaultServings(m.id) > 1 ? el("span", { style: { fontSize: "11px", color: C.textMuted } }, "~" + getDefaultServings(m.id) + " meals from one batch") : null,
+            ]),
             el("span", { style: { fontSize: "13px", color: C.purple, fontWeight: "600", flexShrink: "0" } }, "+ add"),
           ]);
           pickerWrap.appendChild(opt);
