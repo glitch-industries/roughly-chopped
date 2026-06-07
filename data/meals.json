@@ -111,8 +111,8 @@
     "shopping_items": [
       { "item": "Pasta", "section": "pantry" },
       { "item": "Jarred marinara sauce", "section": "pantry" },
-      { "item": "Frozen spinach (optional)", "section": "frozen" },
-      { "item": "Canned white beans (optional)", "section": "pantry" }
+      { "item": "Frozen spinach", "section": "frozen" },
+      { "item": "Canned white beans", "section": "pantry" }
     ]
   },
   {
@@ -274,7 +274,7 @@
     "notes": "Perfect packed lunch — assemble in a container the night before, dressing on the side. Grain + protein + veg + sauce. No rules.",
     "recipe": null,
     "shopping_items": [
-      { "item": "Microwave grain pouches (rice, quinoa, or farro)", "section": "pantry" },
+      { "item": "Microwave rice pouches", "section": "pantry" },
       { "item": "Pre-cooked chicken or canned chickpeas", "section": "refrigerated" },
       { "item": "Shredded carrots, cucumber, or edamame", "section": "produce" },
       { "item": "Tahini or miso ginger dressing", "section": "pantry" },
@@ -376,7 +376,7 @@
       "Stir in a handful of spinach at the end. Serve with bread."
     ],
     "shopping_items": [
-      { "item": "Canned white beans (2 cans)", "section": "pantry" },
+      { "item": "Canned white beans", "section": "pantry" },
       { "item": "Canned crushed tomatoes", "section": "pantry" },
       { "item": "Vegetable broth", "section": "pantry" },
       { "item": "Baby spinach", "section": "produce" }
@@ -483,7 +483,7 @@
     "notes": "This is a meal. Grab whatever's around and put it on a plate. The vibe is: something crunchy, something creamy, something fresh, something sweet. That's it.",
     "recipe": null,
     "shopping_items": [
-      { "item": "Crackers (any kind)", "section": "pantry" },
+      { "item": "Crackers", "section": "pantry" },
       { "item": "Cheese (sliced or block)", "section": "refrigerated" },
       { "item": "Grapes or apple", "section": "produce" },
       { "item": "Deli turkey or hard boiled eggs", "section": "refrigerated" },
@@ -538,7 +538,7 @@
       "Taste and adjust salt. Serve with grilled cheese or crusty bread."
     ],
     "shopping_items": [
-      { "item": "Canned whole peeled tomatoes (2 cans)", "section": "pantry" },
+      { "item": "Canned whole peeled tomatoes", "section": "pantry" },
       { "item": "Vegetable broth", "section": "pantry" },
       { "item": "Cream cheese", "section": "refrigerated" }
     ]
@@ -559,7 +559,7 @@
       "Top with sour cream, shredded cheese, hot sauce."
     ],
     "shopping_items": [
-      { "item": "Canned black beans (3 cans)", "section": "pantry" },
+      { "item": "Canned black beans", "section": "pantry" },
       { "item": "Canned diced tomatoes", "section": "pantry" },
       { "item": "Vegetable broth", "section": "pantry" },
       { "item": "Lime", "section": "produce" },
@@ -582,7 +582,7 @@
       "Top with shredded cheddar, green onion, hot sauce."
     ],
     "shopping_items": [
-      { "item": "Frozen corn (one bag)", "section": "frozen" },
+      { "item": "Frozen corn", "section": "frozen" },
       { "item": "Potatoes", "section": "produce" },
       { "item": "Vegetable broth", "section": "pantry" },
       { "item": "Cream cheese", "section": "refrigerated" },
@@ -622,7 +622,7 @@
     "notes": "2-minute packed lunch. Roll tight and wrap in foil so it holds together in your bag. Eat at room temp — no microwave needed.",
     "recipe": null,
     "shopping_items": [
-      { "item": "Large flour tortillas", "section": "pantry" },
+      { "item": "Flour tortillas", "section": "pantry" },
       { "item": "Kevin's pre-cooked chicken", "section": "refrigerated" },
       { "item": "Baby spinach or romaine", "section": "produce" },
       { "item": "Shredded cheese", "section": "refrigerated" },
@@ -754,7 +754,7 @@
     "notes": "Any cracker works. Add a few apple slices on the side if you have them.",
     "recipe": null,
     "shopping_items": [
-      { "item": "Crackers (Ritz, Triscuits, or whatever)", "section": "pantry" },
+      { "item": "Crackers", "section": "pantry" },
       { "item": "Peanut butter", "section": "pantry" }
     ]
   },
