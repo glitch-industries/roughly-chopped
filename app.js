@@ -21,6 +21,7 @@ var state = {
   meals: [],              // loaded from meals.json
   modal: null,            // null | {type, data}
   selectedWeekDay: null,  // for week tab day detail
+  picker: null,           // null | { type: "breakfast"|"lunch"|"dinner", seed: N }
 };
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -602,49 +603,211 @@ function renderLibraryCard(meal) {
 }
 
 // ─── PLAN TAB ─────────────────────────────────────────────────────────────────
+var THEMES = [
+  { id: "texmex",        label: "Tex-Mex",    emoji: "🌮",
+    meals: ["eggo-pb", "salad-kit-chicken", "salsa-verde-enchiladas", "ground-beef-tacos", "veggie-quesadilla", "air-fryer-nachos"] },
+  { id: "mediterranean", label: "Med Week",   emoji: "🫒",
+    meals: ["avocado-toast", "greek-salad-hummus", "shakshuka", "beef-couscous", "air-fryer-falafel", "white-bean-tomato-soup"] },
+  { id: "asian",         label: "Asian",      emoji: "🍜",
+    meals: ["eggo-pb", "buddha-bowl", "teriyaki-beef-bowl", "air-fryer-tofu-bowl", "air-fryer-gyoza", "ramen-egg"] },
+  { id: "cozy",          label: "Cozy Soups", emoji: "🍲",
+    meals: ["eggo-pb", "salad-kit-chicken", "tomato-basil-soup", "potato-leek-soup", "white-bean-tomato-soup", "red-lentil-soup"] },
+  { id: "mix",           label: "Mix It Up",  emoji: "✨",
+    meals: ["eggo-pb", "salad-kit-chicken", "frozen-veggie-meal", "veggie-quesadilla", "shakshuka", "pasta-jarred-sauce"] },
+];
+
+function seededShuffle(arr, seed) {
+  var a = arr.slice(), s = seed + 1;
+  for (var i = a.length - 1; i > 0; i--) {
+    s = ((s * 1103515245) + 12345) & 0x7fffffff;
+    var j = Math.abs(s) % (i + 1);
+    var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+  }
+  return a;
+}
+
 function renderPlan() {
   var wrap = el("div", { style: { padding: "20px 16px" } });
   var plan = getWeekPlan();
+  if (!plan.servings) plan.servings = {};
 
-  wrap.appendChild(el("p", { style: { fontSize: "14px", color: C.textMuted, marginBottom: "20px", lineHeight: "1.5" } },
-    "Pick the meals you want this week. The app will build your shopping list."
-  ));
-
-  // Meal selector
-  wrap.appendChild(el("p", { style: { fontSize: "13px", fontWeight: "600", color: C.textMuted, letterSpacing: "0.5px", textTransform: "uppercase", marginBottom: "12px" } }, "This Week's Meals"));
-
-  state.meals.forEach(function(meal) {
-    var selected = plan.meal_pool.indexOf(meal.id) !== -1;
-    var card = el("div", {
+  // ── Theme bar ──────────────────────────────────────────────────────────────
+  wrap.appendChild(el("p", { style: { fontSize: "12px", color: C.textMuted, marginBottom: "8px" } }, "Quick-start with a theme:"));
+  var themeBar = el("div", { style: {
+    display: "flex", gap: "8px", overflowX: "auto", paddingBottom: "4px",
+    marginBottom: "24px", WebkitOverflowScrolling: "touch",
+  }});
+  THEMES.forEach(function(theme) {
+    themeBar.appendChild(el("button", {
       style: {
-        display: "flex", alignItems: "center", gap: "12px",
-        background: selected ? C.chipInactive : C.surface,
-        border: "1.5px solid " + (selected ? C.brand : C.border),
-        borderRadius: "12px", padding: "12px 14px", marginBottom: "10px", cursor: "pointer",
-        transition: "all 0.15s",
+        flexShrink: "0", padding: "8px 14px", borderRadius: "20px",
+        border: "1.5px solid " + C.border, background: C.surface,
+        cursor: "pointer", fontSize: "13px", fontWeight: "600",
+        color: C.textPrimary, whiteSpace: "nowrap",
       },
       onClick: function() {
         var p = getWeekPlan();
-        var idx = p.meal_pool.indexOf(meal.id);
-        if (idx === -1) p.meal_pool.push(meal.id);
-        else p.meal_pool.splice(idx, 1);
+        p.meal_pool = theme.meals.filter(function(id) { return !!getMealById(id); });
+        if (!p.servings) p.servings = {};
         saveWeekPlan(p);
+        state.picker = null;
         render();
       }
-    }, [
-      el("div", { style: {
-        width: "22px", height: "22px", borderRadius: "50%", flexShrink: "0",
-        border: "2px solid " + (selected ? C.brand : C.border),
-        background: selected ? C.brand : "transparent",
-        display: "flex", alignItems: "center", justifyContent: "center",
-        fontSize: "12px", color: C.white,
-      }}, selected ? "✓" : ""),
-      el("div", { style: { flex: "1" } }, [
-        el("div", { style: { fontSize: "15px", fontWeight: "600", color: C.textPrimary } }, meal.name),
-        el("div", { style: { fontSize: "12px", color: C.textMuted, marginTop: "2px" } }, meal.meal_types.join(" · ")),
-      ]),
-    ]);
-    wrap.appendChild(card);
+    }, theme.emoji + " " + theme.label));
+  });
+  wrap.appendChild(themeBar);
+
+  // ── Meal sections by type ──────────────────────────────────────────────────
+  var MEAL_CATS = [
+    { key: "breakfast", label: "Breakfasts", emoji: "🌅" },
+    { key: "lunch",     label: "Lunches",    emoji: "🥗" },
+    { key: "dinner",    label: "Dinners",    emoji: "🍜" },
+  ];
+
+  MEAL_CATS.forEach(function(cat) {
+    var selected = plan.meal_pool.filter(function(id) {
+      var m = getMealById(id);
+      return m && m.meal_types.indexOf(cat.key) !== -1;
+    });
+
+    var section = el("div", { style: { marginBottom: "20px" } });
+
+    // Section header
+    section.appendChild(el("div", { style: {
+      display: "flex", alignItems: "center", gap: "6px", marginBottom: "10px",
+    }}, [
+      el("span", {}, cat.emoji),
+      el("span", { style: { fontSize: "13px", fontWeight: "700", color: C.textMuted, letterSpacing: "0.5px", textTransform: "uppercase" } }, cat.label),
+    ]));
+
+    // Selected meal rows
+    selected.forEach(function(id) {
+      var meal = getMealById(id);
+      if (!meal) return;
+      var servings = (plan.servings && plan.servings[id]) || 1;
+
+      var row = el("div", { style: {
+        display: "flex", alignItems: "center", gap: "8px",
+        background: C.surface, border: "1.5px solid " + C.border,
+        borderRadius: "12px", padding: "10px 12px", marginBottom: "8px",
+      }}, [
+        el("div", { style: { flex: "1", fontSize: "14px", fontWeight: "600", color: C.textPrimary, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" } }, meal.name),
+        // servings −/N/+
+        el("button", {
+          style: {
+            width: "26px", height: "26px", borderRadius: "50%", flexShrink: "0",
+            border: "1.5px solid " + (servings > 1 ? C.border : C.chipInactive),
+            background: "none", cursor: servings > 1 ? "pointer" : "default",
+            fontSize: "15px", color: servings > 1 ? C.textPrimary : C.border,
+            display: "flex", alignItems: "center", justifyContent: "center", padding: "0",
+          },
+          onClick: function() {
+            if (servings <= 1) return;
+            var p = getWeekPlan(); if (!p.servings) p.servings = {};
+            p.servings[id] = servings - 1; saveWeekPlan(p); render();
+          }
+        }, "−"),
+        el("span", { style: { fontSize: "13px", fontWeight: "600", color: C.textPrimary, minWidth: "14px", textAlign: "center", flexShrink: "0" } }, String(servings) + "×"),
+        el("button", {
+          style: {
+            width: "26px", height: "26px", borderRadius: "50%", flexShrink: "0",
+            border: "1.5px solid " + C.border, background: "none", cursor: "pointer",
+            fontSize: "15px", color: C.textPrimary,
+            display: "flex", alignItems: "center", justifyContent: "center", padding: "0",
+          },
+          onClick: function() {
+            var p = getWeekPlan(); if (!p.servings) p.servings = {};
+            p.servings[id] = servings + 1; saveWeekPlan(p); render();
+          }
+        }, "+"),
+        // remove
+        el("button", {
+          style: {
+            width: "26px", height: "26px", borderRadius: "50%", flexShrink: "0",
+            border: "none", background: "none", cursor: "pointer",
+            fontSize: "18px", color: C.textMuted, padding: "0",
+            display: "flex", alignItems: "center", justifyContent: "center",
+          },
+          onClick: function() {
+            var p = getWeekPlan();
+            var idx = p.meal_pool.indexOf(id);
+            if (idx !== -1) p.meal_pool.splice(idx, 1);
+            if (p.servings) delete p.servings[id];
+            saveWeekPlan(p); render();
+          }
+        }, "×"),
+      ]);
+      section.appendChild(row);
+    });
+
+    // Picker (open for this category)
+    var pickerOpen = state.picker && state.picker.type === cat.key;
+    if (pickerOpen) {
+      var seed = state.picker.seed || 0;
+      var candidates = state.meals.filter(function(m) {
+        return m.meal_types.indexOf(cat.key) !== -1 && plan.meal_pool.indexOf(m.id) === -1;
+      });
+      var shown = seededShuffle(candidates, seed).slice(0, 3);
+
+      var pickerWrap = el("div", { style: {
+        background: C.purpleLight, border: "1.5px solid " + C.border,
+        borderRadius: "12px", padding: "12px", marginBottom: "8px",
+      }});
+
+      if (shown.length === 0) {
+        pickerWrap.appendChild(el("p", { style: { fontSize: "13px", color: C.textMuted, padding: "4px 0" } }, "All options are already in your plan."));
+      } else {
+        shown.forEach(function(m, idx2) {
+          var opt = el("div", {
+            style: {
+              display: "flex", alignItems: "center", gap: "10px",
+              padding: "10px 4px", cursor: "pointer",
+              borderBottom: idx2 < shown.length - 1 ? "1px solid " + C.border : "none",
+            },
+            onClick: function() {
+              var p = getWeekPlan();
+              if (p.meal_pool.indexOf(m.id) === -1) p.meal_pool.push(m.id);
+              saveWeekPlan(p);
+              state.picker = null;
+              render();
+            }
+          }, [
+            el("span", { style: { flex: "1", fontSize: "14px", fontWeight: "600", color: C.textPrimary } }, m.name),
+            el("span", { style: { fontSize: "13px", color: C.purple, fontWeight: "600", flexShrink: "0" } }, "+ add"),
+          ]);
+          pickerWrap.appendChild(opt);
+        });
+      }
+
+      pickerWrap.appendChild(el("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: "10px" } }, [
+        el("button", {
+          style: { background: "none", border: "none", cursor: "pointer", fontSize: "13px", color: C.purple, fontWeight: "600", padding: "0" },
+          onClick: function() { state.picker = { type: cat.key, seed: seed + 1 }; render(); }
+        }, "↻ different options"),
+        el("button", {
+          style: { background: "none", border: "none", cursor: "pointer", fontSize: "13px", color: C.textMuted, padding: "0" },
+          onClick: function() { state.picker = null; render(); }
+        }, "done"),
+      ]));
+      section.appendChild(pickerWrap);
+    }
+
+    // Add button
+    if (!pickerOpen) {
+      section.appendChild(el("button", {
+        style: {
+          width: "100%", padding: "10px", borderRadius: "12px",
+          border: "1.5px dashed " + C.border, background: "none", cursor: "pointer",
+          fontSize: "13px", color: C.textMuted, fontWeight: "500",
+        },
+        onClick: function() {
+          state.picker = { type: cat.key, seed: Math.floor(Math.random() * 100) };
+          render();
+        }
+      }, "+ add a " + cat.key));
+    }
+
+    wrap.appendChild(section);
   });
 
   // Shopping list
@@ -652,7 +815,7 @@ function renderPlan() {
     wrap.appendChild(el("div", { style: { height: "1px", background: C.border, margin: "20px 0" } }));
 
     var ticked = plan.ticked_items || [];
-    var bySection = buildShoppingList(plan.meal_pool);
+    var bySection = buildShoppingList(plan.meal_pool, plan.servings || {});
     var hasAny = SECTIONS.some(function(s) { return bySection[s.key] && bySection[s.key].length; });
     var totalItems = SECTIONS.reduce(function(n, s) { return n + (bySection[s.key] ? bySection[s.key].length : 0); }, 0);
     var tickedCount = ticked.length;
@@ -751,7 +914,7 @@ var SECTIONS = [
   { key: "pantry",       label: "Pantry",        emoji: "🥫" },
 ];
 
-function buildShoppingList(mealIds) {
+function buildShoppingList(mealIds, servings) {
   var seen = {};
   var bySection = {};
   SECTIONS.forEach(function(s) { bySection[s.key] = []; });
@@ -759,13 +922,14 @@ function buildShoppingList(mealIds) {
   mealIds.forEach(function(id) {
     var meal = getMealById(id);
     if (!meal) return;
+    var qty = (servings && servings[id]) || 1;
     var items = meal.shopping_items || (meal.shopping_item ? [{ item: meal.shopping_item, section: "pantry" }] : []);
     items.forEach(function(si) {
       if (!seen[si.item]) {
         seen[si.item] = true;
         var sec = si.section || "pantry";
         if (!bySection[sec]) bySection[sec] = [];
-        bySection[sec].push(si.item);
+        bySection[sec].push(qty > 1 ? si.item + " ×" + qty : si.item);
       }
     });
   });
